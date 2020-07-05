@@ -7,7 +7,6 @@
 </head>
 <body>
     <h3>Testmedb</h3>
-    pr test
     <a href="./test/login.php">登入</a>
     <br><br>
     <a href="./test/regist.php">註冊</a>
