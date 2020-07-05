@@ -7,6 +7,11 @@
             $databaseName = "testme";
             $dbuser = "popo";
             $dbpassword = "075717169";
+            //解決跨域問題
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Methods: *");
+            header("Access-Control-Allow-Headers: *");
+            //資料庫連線
             if(!isset($conn)){
                 try{
                     $conn = new PDO("mysql:host=$serverName; dbname=$databaseName;",$dbuser,$dbpassword);

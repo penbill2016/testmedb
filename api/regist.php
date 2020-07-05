@@ -1,7 +1,8 @@
 <?php 
     require_once '../db.php';
-    $conn = ConnectDB::getConnection();
-    $stmt = $conn->prepare("SELECT * FROM `user` WHERE `account`='{$_POST["account"]}'");
+    //post解析
+    $_POST = json_decode(array_keys($_POST)[0], true);
+    $stmt =  db_func::db_q("SELECT * FROM `user` WHERE `account`='{$_POST["account"]}'");
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_CLASS);
     $flag = 0;//0帳號不存在，1存在
@@ -15,7 +16,7 @@
         echo json_encode(0);
     }
     else{
-        $insert = $conn->prepare("INSERT INTO `user`(`account`, `password`, `email`) VALUES ('{$_POST["account"]}','{$_POST["password"]}','{$_POST["email"]}')");
+        $insert = db_func::db_q("INSERT INTO `user`(`account`, `password`, `email`) VALUES ('{$_POST["account"]}','{$_POST["password"]}','{$_POST["email"]}')");;
         $insert->execute();
         //echo '註冊成功';
         echo json_encode(1);
