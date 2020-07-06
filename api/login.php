@@ -9,7 +9,6 @@
     foreach($result as $value){
         if($value->account!=""){
             $flag = 1;
-            db_func::setlogincheck($value->account,$value->password);
         }
     }
     if($flag==1){
