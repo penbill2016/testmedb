@@ -1,36 +1,83 @@
 <?php 
     require_once '../db.php';
     //post解析
-    $_POST = json_decode(array_keys($_POST)[0], true);
-    $stmt = db_func::db_q("SELECT * FROM `user` WHERE `account`='{$_POST["account"]}' && `password`='{$_POST["password"]}'");
+    $Post = json_decode(file_get_contents('php://input'), true);
+    $stmt = db_func::db_q("SELECT * FROM `user` WHERE `account`='{$Post["account"]}' && `password`='{$Post["password"]}'");
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_CLASS);
-    $userid = -1;
     $flag = 0;
-    $userdata = array();
-    $userdata['folder'] = array();
-    $userdata['test'] = array();
+
+    //API資料結構
+    //user
+    $userdata = [
+        'id' => null,
+        'account'  => null,
+        'password'  => null,
+        'email'  => null,
+        'outfolders'  => [],
+        'outtests'  => [],
+    ];
+    //outfolder
+    $outfolderdata = [
+        'id' => null,
+        'name'  => null,
+        'createdate'  => null,
+        'modifydate'  => null,
+    ];
+    //outtest
+    $outtestdata = [
+        'id' => null,
+        'name'  => null,
+        'questions' => null,
+        'mode'  => null,
+        'correctrate'  => null,
+        'createdate'  => null,
+        'modifydate'  => null,
+    ];
     foreach($result as $value){
         if($value->account!=""){
             $flag = 1;
-            $userid = $value->id;
+            $userdata['id'] = $value->id;
+            $userdata['account'] = $value->account;
+            $userdata['password'] = $value->password;
+            $userdata['email'] = $value->email;
         }
     }
     if($flag==1){
-        $folder_q = db_func::db_q("SELECT * FROM `folder` WHERE `createUserId`='{$userid}' && `isOutFolder`=0");
-        $folder_q->execute();
-        $folder_r = $folder_q->fetchAll(PDO::FETCH_CLASS);
-        $folder_data = array();
-        foreach($folder_r as $value){
-            array_push($folder_data['name'],$value->name); 
-            // array_push($folder_data['createDate'],$value->createDate); 
-            // array_push($folder_data['modifyDate'],$value->modifyDate); 
+        //outfolders
+        $outfolder_q = db_func::db_q("SELECT * FROM `folder` WHERE `createUserId`='{$userdata['id']}'");
+        $outfolder_q->execute();
+        $outfolder_r = $outfolder_q->fetchAll(PDO::FETCH_CLASS);
+        $outfolderid = null;
+        foreach($outfolder_r as $value){
+            if($value->isOutFolder){
+                $outfolderid = $value->id;
+            }
+            else{
+                $outfolderdata['id'] = $value->id; 
+                $outfolderdata['name'] = $value->name;
+                $outfolderdata['createdate'] = $value->createDate;
+                $outfolderdata['modifydate'] = $value->modifyDate;
+                array_push($userdata['outfolders'],$outfolderdata);
+            }
         }
-        array_push($userdata['folder'],$folder_data);
+        //outtests
+        $outtest_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`='{$outfolderid}'");
+        $outtest_q->execute();
+        $outtest_r = $outtest_q->fetchAll(PDO::FETCH_CLASS);
+        foreach($outtest_r as $value){
+            $outtestdata['id'] = $value->id; 
+            $outtestdata['name'] = $value->name;
+            $outtestdata['questions'] = $value->questions;
+            $outtestdata['mode'] = $value->mode;
+            $outtestdata['correctrate'] = $value->correctRate;
+            $outtestdata['createdate'] = $value->createDate;
+            $outtestdata['modifydate'] = $value->modifyDate; 
+            array_push($userdata['outtests'],$outtestdata);
+        }
         echo json_encode($userdata); 
     }
     else{
-        echo json_encode(0); 
-       
+        echo json_encode(0);       
     }
 ?>
