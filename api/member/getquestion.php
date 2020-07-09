@@ -1,10 +1,8 @@
 <?php 
-    require_once '../../db.php';
-    
+    require_once '../../db.php';    
     $stmt = db_func::db_q("SELECT * FROM `question` WHERE `createTestId`='{$_GET['testid']}'");
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_CLASS);
-    $flag = 0;//沒有題目
     $questions = array();
     $questiondata = [
         'id' => null,
