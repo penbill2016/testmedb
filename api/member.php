@@ -14,11 +14,12 @@
         'account'  => null,
         'password'  => null,
         'email'  => null,
-        'outfolders'  => [],
+        'outfolderid' => null,
+        'folders'  => [],
         'outtests'  => [],
     ];
     //outfolder
-    $outfolderdata = [
+    $folderdata = [
         'id' => null,
         'name'  => null,
         'createdate'  => null,
@@ -35,16 +36,14 @@
         'modifydate'  => null,
     ];
     foreach($result as $value){
-        if($value->account!=""){
-            $flag = 1;
-            $userdata['id'] = $value->id;
-            $userdata['account'] = $value->account;
-            $userdata['password'] = $value->password;
-            $userdata['email'] = $value->email;
-        }
+        $flag = 1;
+        $userdata['id'] = $value->id;
+        $userdata['account'] = $value->account;
+        $userdata['password'] = $value->password;
+        $userdata['email'] = $value->email;
     }
     if($flag==1){
-        //outfolders
+        //folders
         $outfolder_q = db_func::db_q("SELECT * FROM `folder` WHERE `createUserId`='{$userdata['id']}'");
         $outfolder_q->execute();
         $outfolder_r = $outfolder_q->fetchAll(PDO::FETCH_CLASS);
@@ -52,13 +51,14 @@
         foreach($outfolder_r as $value){
             if($value->isOutFolder){
                 $outfolderid = $value->id;
+                $userdata['outfolderid'] = $outfolderid;
             }
             else{
-                $outfolderdata['id'] = $value->id; 
-                $outfolderdata['name'] = $value->name;
-                $outfolderdata['createdate'] = $value->createDate;
-                $outfolderdata['modifydate'] = $value->modifyDate;
-                array_push($userdata['outfolders'],$outfolderdata);
+                $folderdata['id'] = $value->id; 
+                $folderdata['name'] = $value->name;
+                $folderdata['createdate'] = $value->createDate;
+                $folderdata['modifydate'] = $value->modifyDate;
+                array_push($userdata['folders'],$folderdata);
             }
         }
         //outtests

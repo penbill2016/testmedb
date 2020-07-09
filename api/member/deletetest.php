@@ -2,17 +2,17 @@
     require_once '../../db.php';
     //post解析
     $Post = json_decode(file_get_contents('php://input'), true);
-    $folderstr = '';
+    $teststr = '';
     $isfirst = true;
-    foreach($Post['foldersid'] as $value){
+    foreach($Post['testsid'] as $value){
         if($isfirst){
             $isfirst = false;
-            $folderstr.=$value;
+            $teststr.=$value;
         }else{
-            $folderstr.=','.$value;
+            $teststr.=','.$value;
         }
     }
-    $stmt = db_func::db_q("DELETE FROM `folder` WHERE `id` in ({$folderstr})");
+    $stmt = db_func::db_q("DELETE FROM `test` WHERE `id` in ({$teststr})");
     $stmt->execute();
-    echo $folderstr;    
+    echo $teststr;    
 ?>
