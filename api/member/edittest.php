@@ -14,8 +14,18 @@
     }
     //更新test title
     $quesCounts = count($Post['questests']);
-    $test_q = db_func::db_q("UPDATE `test` SET `name`='{$Post['testtitle']}',`questions`='{$quesCounts}' WHERE `id`='{$Post['testid']}'");
+    $date = func::get_nowdate();
+    $mode = 0;
+    switch($Post['mode']){
+        case "0":
+            $mode = 0;
+            break;
+        case "1":
+            $mode = 1;
+            break;
+    }
+    $test_q = db_func::db_q("UPDATE `test` SET `name`='{$Post['testtitle']}',`questions`='{$quesCounts}',`mode`='{$mode}',`modifyDate`='{$date}' WHERE `id`='{$Post['testid']}'");
     $test_q->execute();
-    //新增成功
+    //編輯成功
     echo json_encode(1);
 ?>

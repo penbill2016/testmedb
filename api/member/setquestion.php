@@ -2,8 +2,9 @@
     require_once '../../db.php';
     //post解析
     $Post = json_decode(file_get_contents('php://input'), true);
-    $stmt = db_func::db_q("UPDATE `test` SET `correctRate`='{$Post['correctrate']}' WHERE `id`='{$Post['testid']}'");
+    $date = func::get_nowdate();
+    $stmt = db_func::db_q("UPDATE `test` SET `correctRate`='{$Post['correctrate']}',`modifyDate`='{$date}' WHERE `id`='{$Post['testid']}'");
     $stmt->execute();
-   
+    //更新成功
     echo json_encode(1);
 ?>

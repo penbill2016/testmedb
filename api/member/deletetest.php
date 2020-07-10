@@ -12,7 +12,10 @@
             $teststr.=','.$value;
         }
     }
-    $stmt = db_func::db_q("DELETE FROM `test` WHERE `id` in ({$teststr})");
-    $stmt->execute();
-    echo $teststr;    
+    $test_q = db_func::db_q("DELETE FROM `test` WHERE `id` IN ({$teststr})");
+    $test_q->execute();
+    $question_q = db_func::db_q("DELETE FROM `question` WHERE `createTestId` IN ({$teststr})");
+    $question_q->execute();
+    //刪除成功
+    echo json_encode(1);  
 ?>

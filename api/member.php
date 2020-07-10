@@ -42,9 +42,46 @@
         $userdata['password'] = $value->password;
         $userdata['email'] = $value->email;
     }
+    $folderorderby = '';
+    $folderorder = '';
+    switch($Post["folderorderby"]){
+        case "Created":
+            $folderorderby = "createDate";
+        break;
+        case "Modified":
+            $folderorderby = "modifyDate";
+        break;
+    }
+    if($Post["folderasc"]){
+        $folderorder = "ASC";
+    }
+    else{
+        $folderorder = "DESC";
+    }
+
+    $testorderby = '';    
+    $testorder = '';
+    switch($Post["testorderby"]){
+        case "Created":
+            $testorderby = "createDate";
+            break;
+        case "Modified":
+            $testorderby = "modifyDate";
+            break;
+        case "Correctrate":
+            $testorderby = "correctRate";
+            break;
+    }
+    if($Post["testasc"]){
+        $testorder = "ASC";
+    }
+    else{
+        $testorder = "DESC";
+    }
+
     if($flag==1){
         //folders
-        $outfolder_q = db_func::db_q("SELECT * FROM `folder` WHERE `createUserId`='{$userdata['id']}'");
+        $outfolder_q = db_func::db_q("SELECT * FROM `folder` WHERE `createUserId`='{$userdata['id']}' ORDER BY `{$folderorderby}` {$folderorder}");
         $outfolder_q->execute();
         $outfolder_r = $outfolder_q->fetchAll(PDO::FETCH_CLASS);
         $outfolderid = null;
@@ -62,7 +99,7 @@
             }
         }
         //outtests
-        $outtest_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`='{$outfolderid}'");
+    $outtest_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`='{$outfolderid}' ORDER BY `{$testorderby}` {$testorder}");
         $outtest_q->execute();
         $outtest_r = $outtest_q->fetchAll(PDO::FETCH_CLASS);
         foreach($outtest_r as $value){

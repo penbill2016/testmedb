@@ -11,6 +11,8 @@
             header("Access-Control-Allow-Origin: *");
             header("Access-Control-Allow-Methods: *");
             header("Access-Control-Allow-Headers: *");
+            //時區設定
+            date_default_timezone_set("Asia/Taipei");
             //資料庫連線
             if(!isset($conn)){
                 try{
@@ -68,6 +70,9 @@
         function r_size($input){
             $result=$input->rowcount();
             return $result;
+        }
+        function get_nowdate(){            
+            return date('Y-m-d H:i:s');
         }
     }
 ?>

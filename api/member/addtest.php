@@ -5,7 +5,17 @@
     $quesCounts = count($Post['questests']);
 
     $conn = ConnectDB::getConnection();
-    $test_q = $conn->prepare("INSERT INTO `test`(`name`, `questions`, `mode`, `correctRate`, `createDate`, `modifyDate`, `createFolderId`) VALUES ('{$Post["testtitle"]}','{$quesCounts}','0','0','0','0','{$Post["folderid"]}')");
+    $date = func::get_nowdate();
+    $mode = 0;
+    switch($Post['mode']){
+        case "0":
+            $mode = 0;
+            break;
+        case "1":
+            $mode = 1;
+            break;
+    }
+    $test_q = $conn->prepare("INSERT INTO `test`(`name`, `questions`, `mode`, `correctRate`, `createDate`, `modifyDate`, `createFolderId`) VALUES ('{$Post["testtitle"]}','{$quesCounts}','{$mode}','0%','{$date}','{$date}','{$Post["folderid"]}')");
     $test_q->execute();
     $testid = $conn->lastInsertId();
     foreach($Post['questests'] as $value){
