@@ -4,8 +4,15 @@
         static $conn = NULL;
         function getConnection(){
             $serverName = "localhost";
+            
+            //local
             $databaseName = "testme";
             $dbuser = "popo";
+
+            //godady
+            //$databaseName = "dbtestme";
+            //$dbuser = "penbillpopo";
+
             $dbpassword = "075717169";
             //解決跨域問題
             header("Access-Control-Allow-Origin: *");
