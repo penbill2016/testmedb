@@ -1,5 +1,7 @@
 <?php 
     require_once '../../db.php';
+    //post解析
+    $Post = json_decode(file_get_contents('php://input'), true);
     //API資料結構   
     $tests = array();
     //outtest
@@ -12,9 +14,28 @@
         'createdate'  => null,
         'modifydate'  => null,
     ];
+    $testorderby = '';    
+    $testorder = '';
+    switch($Post["testorderby"]){
+        case "Created":
+            $testorderby = "createDate";
+            break;
+        case "Modified":
+            $testorderby = "modifyDate";
+            break;
+        case "Correctrate":
+            $testorderby = "correctRate";
+            break;
+    }
+    if($Post["testasc"]){
+        $testorder = "ASC";
+    }
+    else{
+        $testorder = "DESC";
+    }
     //outtests
-    $test_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`=?");
-    $test_q->bindParam(1,$_GET["folderid"]);
+    $test_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`=? ORDER BY `{$testorderby}` {$testorder}");
+    $test_q->bindParam(1,$Post["folderid"]);
     $test_q->execute();
     $test_r = $test_q->fetchAll(PDO::FETCH_CLASS);
     foreach($test_r as $value){

@@ -101,7 +101,7 @@
             }
         }
         //outtests
-    $outtest_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`='{$outfolderid}' ORDER BY `{$testorderby}` {$testorder}");
+        $outtest_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`='{$outfolderid}' ORDER BY `{$testorderby}` {$testorder}");
         $outtest_q->execute();
         $outtest_r = $outtest_q->fetchAll(PDO::FETCH_CLASS);
         foreach($outtest_r as $value){
