@@ -13,7 +13,9 @@
         }
     }
     $date = func::get_nowdate();
-    $stmt = db_func::db_q("UPDATE `test` SET `createFolderId`='{$Post['folderid']}',`modifyDate`='{$date}' WHERE `id` IN ({$teststr})");
+    $stmt = db_func::db_q("UPDATE `test` SET `createFolderId`=?,`modifyDate`=? WHERE `id` IN ({$teststr})");
+    $stmt->bindParam(1,$Post['folderid']);
+    $stmt->bindParam(2,$date);
     $stmt->execute();
     //更新成功
     echo json_encode(1);

@@ -13,7 +13,8 @@
         'modifydate'  => null,
     ];
     //outtests
-    $test_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`='{$_GET["folderid"]}'");
+    $test_q = db_func::db_q("SELECT * FROM `test` WHERE `createFolderId`=?");
+    $test_q->bindParam(1,$_GET["folderid"]);
     $test_q->execute();
     $test_r = $test_q->fetchAll(PDO::FETCH_CLASS);
     foreach($test_r as $value){

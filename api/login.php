@@ -2,7 +2,9 @@
     require_once '../db.php';
     //post解析
     $Post = json_decode(file_get_contents('php://input'), true);
-    $stmt = db_func::db_q("SELECT * FROM `user` WHERE `account`='{$Post["account"]}' && `password`='{$Post["password"]}'");
+    $stmt = db_func::db_q("SELECT * FROM `user` WHERE `account`= ? && `password`=?");
+    $stmt->bindParam(1,$Post["account"]);
+    $stmt->bindParam(2,$Post["password"]);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_CLASS);
     $flag = 0;//0帳號不存在，1存在
