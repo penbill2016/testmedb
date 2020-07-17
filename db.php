@@ -6,18 +6,18 @@
             $serverName = "localhost";
             
             //local
-            $databaseName = "testme";
-            $dbuser = "popo";
+            // $databaseName = "testme";
+            // $dbuser = "popo";
 
             //godady
-            //$databaseName = "dbtestme";
-            //$dbuser = "penbillpopo";
+            $databaseName = "dbtestme";
+            $dbuser = "penbillpopo";
 
             $dbpassword = "075717169";
             //解決跨域問題
-            header("Access-Control-Allow-Origin: *");
-            header("Access-Control-Allow-Methods: *");
-            header("Access-Control-Allow-Headers: *");
+            //header("Access-Control-Allow-Origin: *");
+            // header("Access-Control-Allow-Methods: *");
+            // header("Access-Control-Allow-Headers: *");
             //時區設定
             date_default_timezone_set("Asia/Taipei");
             //資料庫連線
