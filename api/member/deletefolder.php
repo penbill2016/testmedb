@@ -27,12 +27,14 @@
             $teststr.=','."'".$value->id."'";
         }        
     }
-    $folder_q = db_func::db_q("DELETE FROM `folder` WHERE `id` IN ({$folderstr})");
+    $folder_q = db_func::db_q("DELETE FROM `folder` WHERE `id` IN ({$folderstr});
+    DELETE FROM `test` WHERE `createFolderId` IN ({$folderstr});
+    DELETE FROM `question` WHERE `createTestId` IN ({$teststr})");
     $folder_q->execute();
-    $test_q = db_func::db_q("DELETE FROM `test` WHERE `createFolderId` IN ({$folderstr})");
-    $test_q->execute();
-    $question_q = db_func::db_q("DELETE FROM `question` WHERE `createTestId` IN ({$teststr})");
-    $question_q->execute();
+    // $test_q = db_func::db_q("DELETE FROM `test` WHERE `createFolderId` IN ({$folderstr})");
+    // $test_q->execute();
+    // $question_q = db_func::db_q("DELETE FROM `question` WHERE `createTestId` IN ({$teststr})");
+    // $question_q->execute();
     //刪除成功
     echo json_encode(1);    
 ?>
